@@ -1,3 +1,4 @@
-# ELS - Enterprise Linux/EuroLinux Sources - libXtst 
+# ELS - Enterprise Linux/EuroLinux Sources - libXtst
+ 
 ## Usage:
-  Checkout branch or tag.
+  Checkout branch or tag. Use `make sources` to recreate  SOURCE0 archive.
