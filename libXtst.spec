@@ -1,15 +1,29 @@
+%global tarball libXtst
+#global gitdate 20130524
+%global gitversion e7e04b7be
+
 Summary: X.Org X11 libXtst runtime library
 Name: libXtst
-Version: 1.2.1
-Release: 2%{?dist}
+Version: 1.2.2
+Release: 2.1%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
 License: MIT
 Group: System Environment/Libraries
 URL: http://www.x.org
 
-Source0: ftp://ftp.x.org/pub/individual/lib/%{name}-%{version}.tar.bz2
+%if 0%{?gitdate}
+Source0:    %{tarball}-%{gitdate}.tar.bz2
+Source1:    make-git-snapshot.sh
+Source2:    commitid
+%else
+Source0: http://xorg.freedesktop.org/archive/individual/lib/%{name}-%{version}.tar.bz2
+%endif
 
+Requires: libX11 >= 1.5.99.902
+
+BuildRequires: xorg-x11-util-macros
+BuildRequires: autoconf automake libtool
 BuildRequires: xorg-x11-proto-devel
-BuildRequires: libX11-devel
+BuildRequires: libX11-devel >= 1.5.99.902
 BuildRequires: libXext-devel
 BuildRequires: libXi-devel
 BuildRequires: xmlto
@@ -20,15 +34,17 @@ X.Org X11 libXtst runtime library
 %package devel
 Summary: X.Org X11 libXtst development package
 Group: Development/Libraries
-Requires: %{name} = %{version}-%{release}
+Requires: %{name}%{?_isa} = %{version}-%{release}
+Requires: libXi-devel%{?_isa}
 
 %description devel
 X.Org X11 libXtst development package
 
 %prep
-%setup -q
+%setup -q -n %{tarball}-%{?gitdate:%{gitdate}}%{!?gitdate:%{version}}
 
 %build
+autoreconf -v --install --force
 
 %configure --disable-static
 make %{?_smp_mflags}
@@ -51,7 +67,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%doc COPYING ChangeLog
+%doc COPYING
 %{_libdir}/libXtst.so.6
 %{_libdir}/libXtst.so.6.1.0
 
@@ -64,6 +80,32 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man3/XTest*.3*
 
 %changelog
+* Wed Feb 12 2014 Adam Jackson <ajax@redhat.com> 1.2.2-2.1
+- Mass rebuild
+
+* Fri Dec 27 2013 Daniel Mach <dmach@redhat.com> - 1.2.2-2
+- Mass rebuild 2013-12-27
+
+* Fri May 31 2013 Peter Hutterer <peter.hutterer@redhat.com> 1.2.2-1
+- libXtst 1.2.2
+
+* Mon May 27 2013 Peter Hutterer <peter.hutterer@redhat.com> - 1.2.1-7.20130524gite7e04b7be
+- Require libX11 1.6RC2 for _XEatDataWords
+
+* Fri May 24 2013 Peter Hutterer <peter.hutterer@redhat.com> 1.2.1-6.20130524gite7e04b7be
+- Update to git snapshot to fix CVEs listed below
+- CVE-2013-2063
+
+* Thu Mar 07 2013 Peter Hutterer <peter.hutterer@redhat.com> - 1.2.1-5
+- autoreconf for aarch64
+
+* Thu Feb 14 2013 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.2.1-4
+- Rebuilt for https://fedoraproject.org/wiki/Fedora_19_Mass_Rebuild
+
+* Wed Nov  7 2012 Ville Skyttä <ville.skytta@iki.fi> - 1.2.1-3
+- Add libXi-devel dep to -devel for XInput.h #inclusion.
+- Make main package dep in -devel arch qualified.
+
 * Thu Jul 19 2012 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 1.2.1-2
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_18_Mass_Rebuild
 
