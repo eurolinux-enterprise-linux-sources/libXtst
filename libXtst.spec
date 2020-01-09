@@ -4,8 +4,8 @@
 
 Summary: X.Org X11 libXtst runtime library
 Name: libXtst
-Version: 1.2.2
-Release: 2.1%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
+Version: 1.2.3
+Release: 1%{?gitdate:.%{gitdate}git%{gitversion}}%{?dist}
 License: MIT
 Group: System Environment/Libraries
 URL: http://www.x.org
@@ -80,6 +80,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_mandir}/man3/XTest*.3*
 
 %changelog
+* Thu Jan 19 2017 Benjamin Tissoires <benjamin.tissoires@redhat.com> 1.2.3-1
+- libXtst 1.2.3
+- fixes CVE-2016-7951, CVE-2016-7952 (#1406214)
+
 * Wed Feb 12 2014 Adam Jackson <ajax@redhat.com> 1.2.2-2.1
 - Mass rebuild
 
